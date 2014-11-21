@@ -1,6 +1,6 @@
 {
     "name": "angular-markdown-toolkit",
-    "main": "markdown.js, markdown.css",
+    "main": ["markdown.js", "markdown.css"],
     "version": "1.0",
     "homepage": "https://github.com/hoangductho/angular-markdown-toolkit",
     "authors": [
