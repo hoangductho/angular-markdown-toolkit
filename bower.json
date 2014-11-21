@@ -1,0 +1,25 @@
+{
+  "name": "angular-markdown-toolkit",
+  "main": "markdown.js",
+  "version": "1.0",
+  "homepage": "https://github.com/hoangductho/angular-markdown-toolkit",
+  "authors": [
+    "Hoàng Đức Thọ <hoangductho.3690@gmail.com>"
+  ],
+  "description": "Markdown Editor and Markdown Express for AngularJS",
+  "keywords": [
+    "markdown",
+    "angular",
+    "markdown",
+    "pagedown",
+    "pagedown-extra"
+  ],
+  "license": "MIT",
+  "ignore": [
+    "**/.*",
+    "node_modules",
+    "bower_components",
+    "test",
+    "tests"
+  ]
+}
