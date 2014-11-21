@@ -16,7 +16,23 @@
  *  Use markdown-html allow you add html code into Markdown but your site vulnerable to XSS attacks.
  *  Use markdown-safe, your site is poor, but it is safe for user.
 
-**2. Required**
+**2. Install Markdown Module**
+
+Install: `bower install --save angular-markdown-toolkit`
+
+After install, markdown module included into `index.html`:
+
+```html
+<!--Markdown module css loading-->
+<link rel="stylesheet" href="scripts/modules/markdown/markdown.css">
+```
+
+```html
+<!--Markdown module js loading-->
+<script src="scripts/modules/markdown/markdown.js"></script>
+```
+
+**3. Dependencies**
 
 - *Pagedown Extra*: https://github.com/jmcmanus/pagedown-extra
 
@@ -42,20 +58,6 @@ install: `bower install --save google-code-prettify`
 - *Bootstrap*
 
 install: `bower install --save bootstrap`
-
-**3. Install Markdown Module**
-
-include markdown module into `index.html`:
-
-```html
-<!--Markdown module css loading-->
-<link rel="stylesheet" href="scripts/modules/markdown/markdown.css">
-```
-
-```html
-<!--Markdown module js loading-->
-<script src="scripts/modules/markdown/markdown.js"></script>
-```
 
 
 ----------
