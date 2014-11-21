@@ -8,7 +8,9 @@
     ],
     "description": "Markdown Editor and Markdown Express for AngularJS",
     "dependencies": {
-        "pagedown-extra": "pagedown-extra"
+        "pagedown-extra": "git://github.com/jmcmanus/pagedown-extra.git",
+        "google-code-prettify": "google-code-prettify",
+        "github-markdown-css": "github-markdown-css"
     },
     "keywords": [
         "markdown",
