@@ -39,8 +39,14 @@ install: `bower install --save bootstrap`
 
 **3. Install Markdown Module**
 include markdown module into `index.html`:
+
 ```html
-<!--Markdown module loading-->
+<!--Markdown module css loading-->
+<link rel="stylesheet" href="scripts/modules/markdown/markdown.css">
+```
+
+```html
+<!--Markdown module js loading-->
 <script src="scripts/modules/markdown/markdown.js"></script>
 ```
 

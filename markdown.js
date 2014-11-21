@@ -25,6 +25,48 @@
 
 angular
     .module('markdown',[])
+    .directive('markdownSafeViewer', function($compile, $sce){
+        return {
+            restrict: 'A',
+            scope: {},
+            link: function($scope, element, attrs) {
+
+                // System have input markdown content into editor by set "content" parameter
+                // exam: <markdown-safe content="**Demo Page**"></markdown-safe>
+                var content = null;
+                if(attrs.content) content = attrs.content;
+
+                var unwatch;
+
+                var converter = Markdown.getSanitizingConverter();
+
+                // using Markdown-extra to build markdown editor and markdown preview
+                Markdown.Extra.init(converter, {
+                    extensions: "all",
+                    highlighter: "prettify"
+                });
+
+                var run = function run() {
+                    // stop continuing and watching if scope or the content is unreachable
+                    if (!$scope || (content == undefined || content == null) && unwatch) {
+                        unwatch();
+                        return;
+                    }
+
+                    $scope.sanitizedContent = $sce.trustAsHtml(converter.makeHtml(content));
+                };
+
+                unwatch = $scope.$watch("content", run);
+
+                run();
+                var newElementHtml = '<div ng-bind-html="sanitizedContent" class="wmd-preview markdown-body" style=""></div>';
+
+                var newElement = $compile(newElementHtml)($scope);
+
+                element.append(newElement);
+            }
+        }
+    })
     .directive('markdownHtmlViewer', function($compile, $sce){
         return {
             restrict: 'A',
@@ -74,49 +116,7 @@ angular
 
                 run();
 
-                var newElementHtml = '<div ng-bind-html="sanitizedContent" class="markdown-body"></div>';
-
-                var newElement = $compile(newElementHtml)($scope);
-
-                element.append(newElement);
-            }
-        }
-    })
-    .directive('markdownSafeViewer', function($compile, $sce){
-        return {
-            restrict: 'A',
-            scope: {},
-            link: function($scope, element, attrs) {
-
-                // System have input markdown content into editor by set "content" parameter
-                // exam: <markdown-safe content="**Demo Page**"></markdown-safe>
-                var content = null;
-                if(attrs.content) content = attrs.content;
-
-                var unwatch;
-
-                var converter = Markdown.getSanitizingConverter();
-
-                // using Markdown-extra to build markdown editor and markdown preview
-                Markdown.Extra.init(converter, {
-                    extensions: "all",
-                    highlighter: "prettify"
-                });
-
-                var run = function run() {
-                    // stop continuing and watching if scope or the content is unreachable
-                    if (!$scope || (content == undefined || content == null) && unwatch) {
-                        unwatch();
-                        return;
-                    }
-
-                    $scope.sanitizedContent = $sce.trustAsHtml(converter.makeHtml(content));
-                };
-
-                unwatch = $scope.$watch("content", run);
-
-                run();
-                var newElementHtml = '<div ng-bind-html="sanitizedContent" class="pagedown-preview wmd-panel wmd-preview markdown-body" style=""></div>';
+                var newElementHtml = '<div ng-bind-html="sanitizedContent" class="wmd-preview markdown-body"></div>';
 
                 var newElement = $compile(newElementHtml)($scope);
 
@@ -147,7 +147,7 @@ angular
                 var newElement = $compile(
                     '<div class="markdown-editor">'+
                     '<div class="contianer-fluid col-xs4">'+
-                    '<div id="wmd-preview' + suffix + '" class="pagedown-preview wmd-panel wmd-preview markdown-body" style="">'+
+                    '<div id="wmd-preview' + suffix + '" class="markdown-body wmd-preview">'+
                     '</div>' +
                     '</div>'+
                     '<div class="contianer-fluid col-xs4 block">' +
@@ -211,7 +211,7 @@ angular
                 var newElement = $compile(
                     '<div class="markdown-editor">'+
                     '<div class="contianer-fluid col-xs4">'+
-                    '<div id="wmd-preview' + suffix + '" class="pagedown-preview wmd-panel wmd-preview markdown-body" style="">'+
+                    '<div id="wmd-preview' + suffix + '" class="wmd-preview markdown-body" style="">'+
                     '</div>' +
                     '</div>'+
                     '<div class="contianer-fluid col-xs4 block">' +
