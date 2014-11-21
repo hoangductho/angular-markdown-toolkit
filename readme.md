@@ -19,8 +19,11 @@
 **2. Required**
 
 - *Pagedown Extra*: https://github.com/jmcmanus/pagedown-extra
+
 install: `bower install --save pagedown-extra`
+
 include pagedown extra into `index.html`: 
+
 ```html
 <script src="bower_components/pagedown-extra/pagedown/Markdown.Converter.js"></script>
 <script src="bower_components/pagedown-extra/pagedown/Markdown.Sanitizer.js"></script>
@@ -29,15 +32,19 @@ include pagedown extra into `index.html`:
 ```
 
 - *GitHub Markdown CSS*: https://github.com/sindresorhus/github-markdown-css
+
 install: `bower install --save github-markdown-css`
 
 - *Google Code Prettify*: - *Google Code Prettify*: https://github.com/tcollard/google-code-prettify
+
 install: `bower install --save google-code-prettify`
 
 - *Bootstrap*
+
 install: `bower install --save bootstrap`
 
 **3. Install Markdown Module**
+
 include markdown module into `index.html`:
 
 ```html
@@ -72,14 +79,14 @@ So, Markdown Module provide 2 editors for that options:
 Markdown Module allow you create multi editor in a page. So, to do it, you need add `suffix` parameter into your markdown editor tags. With once of editor, `suffix` is only one.
 
 *Example1*: 
-```
+```html
 <markdown-html suffix="-first"></markdown-html>
 
 <markdown-html suffix="-second"></markdown-html>
 ```
 
 *Example2*: 
-```
+```html
 <markdown-safe suffix="first"></markdown-safe>
 
 <markdown-safe suffix="second"></markdown-safe>
@@ -90,11 +97,11 @@ Markdown Module allow you create multi editor in a page. So, to do it, you need 
 If you want revise markdown code existed, you can push your code into Markdown Editors by `content` parameter.
 
 Example1: 
-```
+```html
 <markdown-html content="##Demo##"></markdown-html>
 ```
 Example1: 
-```
+```html
 <markdown-safe content="##Markdown Safe Editor Demo##"></markdown-safe>
 ```
 
