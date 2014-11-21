@@ -9,17 +9,13 @@
   "description": "Markdown Editor and Markdown Express for AngularJS",
   "keywords": [
     "markdown",
-    "angular",
+    "angular-markdown",
+    "angular-markdown-toolkit",
     "markdown",
+    "editor",
+    "mardown-express",
     "pagedown",
     "pagedown-extra"
   ],
-  "license": "MIT",
-  "ignore": [
-    "**/.*",
-    "node_modules",
-    "bower_components",
-    "test",
-    "tests"
-  ]
+  "license": "MIT"
 }
