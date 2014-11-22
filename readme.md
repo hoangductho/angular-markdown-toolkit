@@ -18,7 +18,10 @@
 
 **2. Install Markdown Module**
 
-Install: `bower install --save angular-markdown-toolkit`
+Install:
+```shell
+bower install --save angular-markdown-toolkit
+```
 
 After install, markdown module included into `index.html`:
 
@@ -32,11 +35,19 @@ After install, markdown module included into `index.html`:
 <script src="scripts/modules/markdown/markdown.js"></script>
 ```
 
+To use markdown module, you need inject it into your module with name `markdown`. Exam
+```javascript
+angular.module('yourApp', ['markdown']);
+```
+
 **3. Dependencies**
 
 - *Pagedown Extra*: https://github.com/jmcmanus/pagedown-extra
 
-install: `bower install --save pagedown-extra`
+install:
+```shell
+bower install --save pagedown-extra
+```
 
 include pagedown extra into `index.html`: 
 
@@ -49,15 +60,24 @@ include pagedown extra into `index.html`:
 
 - *GitHub Markdown CSS*: https://github.com/sindresorhus/github-markdown-css
 
-install: `bower install --save github-markdown-css`
+install:
+```shell
+bower install --save github-markdown-css
+```
 
 - *Google Code Prettify*: - *Google Code Prettify*: https://github.com/tcollard/google-code-prettify
 
-install: `bower install --save google-code-prettify`
+install:
+```shell
+bower install --save google-code-prettify
+```
 
 - *Bootstrap*
 
-install: `bower install --save bootstrap`
+install:
+```shell
+bower install --save bootstrap
+```
 
 
 ----------
@@ -111,9 +131,19 @@ Example1:
 
 When you have markdown content, and you want express it in your site, you can choice once in two options: `express markdown safe` and `express markdown html`.
 
-- *Express markdown safe*: you add atribute `markdown-safe-viewer` into your html tags (ex: `<div markdown-safe-viewer></div>` or `<pre markdown-safe-viewer></pre>`).
+- *Express markdown safe*: you add atribute `markdown-safe-viewer` into your html tags. Example:
+```html
+<div markdown-safe-viewer></div>
+// Or
+<pre markdown-safe-viewer></pre>
+```
 
-- *Express markdown html*: you add atribute `markdown-html-viewer` into your html tags (ex: `<div markdown-html-viewer></div>` or `<pre markdown-html-viewer></pre>`).
+- *Express markdown html*: you add atribute `markdown-html-viewer` into your html tags. Exam:
+```html
+<div markdown-html-viewer></div>
+// Or
+<pre markdown-html-viewer></pre>
+```
 
 
 ----------
