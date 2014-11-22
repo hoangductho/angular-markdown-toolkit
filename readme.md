@@ -65,7 +65,7 @@ install:
 bower install --save github-markdown-css
 ```
 
-- *Google Code Prettify*: - *Google Code Prettify*: https://github.com/tcollard/google-code-prettify
+- *Google Code Prettify*: https://github.com/tcollard/google-code-prettify
 
 install:
 ```shell
@@ -122,7 +122,7 @@ Example1:
 ```html
 <markdown-html content="##Demo##"></markdown-html>
 ```
-Example1: 
+Example2:
 ```html
 <markdown-safe content="##Markdown Safe Editor Demo##"></markdown-safe>
 ```
