@@ -137,6 +137,12 @@ angular
                 // exam: "wmd-input-second" => suffix = "-second"
                 var suffix = '';
                 if(attrs.suffix) suffix = attrs.suffix;
+                
+                // Set height for editor using parmatter "rows" set as attribuite of element
+                // exam: <markdown-html suffix="-second" rows="10"></markdown-html>
+                // Default height of editor is 5 rows
+                var rows = 5;
+                if(attrs.rows) rows = attrs.rows;
 
                 // System have input markdown content into editor by set "content" parameter
                 // exam: <markdown-html content="**Demo Page**"></markdown-html>
@@ -153,7 +159,7 @@ angular
                     '<div class="contianer-fluid col-xs4 block">' +
                     '<div class="wmd-panel">' +
                     '<div id="wmd-button-bar' + suffix + '"></div>' +
-                    '<textarea class="form-control" rows="5" id="wmd-input' + suffix + '">'+content+'</textarea>' +
+                    '<textarea class="form-control" rows="'+rows+'" id="wmd-input' + suffix + '">'+content+'</textarea>' +
                     '</div>' +
                     '</div>'+
                     '</div>')($scope);
@@ -214,6 +220,12 @@ angular
                 // exam: "wmd-input-second" => suffix = "-second"
                 var suffix = '';
                 if(attrs.suffix) suffix = attrs.suffix;
+                
+                // Set height for editor using parmatter "rows" set as attribuite of element
+                // exam: <markdown-safe suffix="-second" rows="10"></markdown-safe>
+                // Default height of editor is 5 rows
+                var rows = 5;
+                if(attrs.rows) rows = attrs.rows;
 
                 // System have input markdown content into editor by set "content" parameter
                 // exam: <markdown-safe content="**Demo Page**"></markdown-safe>
@@ -230,7 +242,7 @@ angular
                     '<div class="contianer-fluid col-xs4 block">' +
                     '<div class="wmd-panel">' +
                     '<div id="wmd-button-bar' + suffix + '"></div>' +
-                    '<textarea class="form-control" rows="5" id="wmd-input' + suffix + '">'+content.toString()+'</textarea>' +
+                    '<textarea class="form-control" rows="'+rows+'" id="wmd-input' + suffix + '">'+content.toString()+'</textarea>' +
                     '</div>' +
                     '</div>'+
                     '</div>')($scope);
