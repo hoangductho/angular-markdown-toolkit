@@ -27,14 +27,14 @@ angular
     .module('markdown',[])
     .directive('markdownHtmlViewer', function($compile, $sce){
         return {
+            transclude: true,
+            replace: true,
             restrict: 'A',
             scope: {},
-            link: function($scope, element, attrs) {
+            link: function(scope, element, attrs) {
 
                 // System have input markdown content into editor by set "content" parameter
                 // exam: <markdown-safe content="**Demo Page**"></markdown-safe>
-                var content = null;
-                if(attrs.content) content = attrs.content;
 
                 var unwatch;
 
@@ -60,23 +60,29 @@ angular
                     highlighter: "prettify"
                 });
 
-                var run = function run() {
-                    // stop continuing and watching if scope or the content is unreachable
-                    if (!$scope || (content == undefined || content == null) && unwatch) {
-                        unwatch();
-                        return;
-                    }
+                // get content from attribute "content" and convert to html
+                var observer = function(content) {
+                    var run = function run() {
+                        // stop continuing and watching if scope or the content is unreachable
+                        if (!scope || (content == undefined || content == null) && unwatch) {
+                            unwatch();
+                            return;
+                        }
 
-                    $scope.sanitizedContent = $sce.trustAsHtml(converter.makeHtml(content));
+                        scope.sanitizedContent = $sce.trustAsHtml(converter.makeHtml(content));
+                    };
+
+                    unwatch = scope.$watch("content", run);
+
+                    run();
                 };
+                attrs.$observe('content', observer);
 
-                unwatch = $scope.$watch("content", run);
-
-                run();
+                // --------------------------------------------------
 
                 var newElementHtml = '<div ng-bind-html="sanitizedContent" class="wmd-preview markdown-body"></div>';
 
-                var newElement = $compile(newElementHtml)($scope);
+                var newElement = $compile(newElementHtml)(scope);
 
                 element.append(newElement);
             }
@@ -84,14 +90,16 @@ angular
     })
     .directive('markdownSafeViewer', function($compile, $sce){
         return {
+            transclude: true,
+            replace: true,
             restrict: 'A',
-            scope: {},
-            link: function($scope, element, attrs) {
+            scope: {
+                //content: '@'
+            },
+            link: function(scope, element, attrs) {
 
                 // System have input markdown content into editor by set "content" parameter
                 // exam: <markdown-safe content="**Demo Page**"></markdown-safe>
-                var content = null;
-                if(attrs.content) content = attrs.content;
 
                 var unwatch;
 
@@ -103,22 +111,30 @@ angular
                     highlighter: "prettify"
                 });
 
-                var run = function run() {
-                    // stop continuing and watching if scope or the content is unreachable
-                    if (!$scope || (content == undefined || content == null) && unwatch) {
-                        unwatch();
-                        return;
-                    }
+                // get content from attribute "content" and convert to html
+                var observer = function(content) {
+                    var run = function run() {
+                        // stop continuing and watching if scope or the content is unreachable
+                        if (!scope || (content == undefined || content == null) && unwatch) {
+                            unwatch();
+                            return;
+                        }
 
-                    $scope.sanitizedContent = $sce.trustAsHtml(converter.makeHtml(content));
+                        scope.sanitizedContent = $sce.trustAsHtml(converter.makeHtml(content));
+                    };
+
+                    unwatch = scope.$watch("content", run);
+
+                    run();
                 };
+                attrs.$observe('content', observer);
 
-                unwatch = $scope.$watch("content", run);
+                // ---------------------------------------------------
 
-                run();
+
                 var newElementHtml = '<div ng-bind-html="sanitizedContent" class="wmd-preview markdown-body" style=""></div>';
 
-                var newElement = $compile(newElementHtml)($scope);
+                var newElement = $compile(newElementHtml)(scope);
 
                 element.append(newElement);
             }
@@ -128,7 +144,7 @@ angular
         return {
             restrict: "E", // active this directive by input tag <markdown-html></markdown-html> into page
             scope: {},
-            link: function ($scope, element, attrs) {
+            link: function (scope, element, attrs) {
 
                 // "suffix" is parameter to identify  markdown editor.
                 // exam: <markdown-html suffix="-second"></markdown-html>
@@ -137,7 +153,7 @@ angular
                 // exam: "wmd-input-second" => suffix = "-second"
                 var suffix = '';
                 if(attrs.suffix) suffix = attrs.suffix;
-                
+
                 // Set height for editor using parmatter "rows" set as attribuite of element
                 // exam: <markdown-html suffix="-second" rows="10"></markdown-html>
                 // Default height of editor is 5 rows
@@ -146,26 +162,6 @@ angular
 
                 // System have input markdown content into editor by set "content" parameter
                 // exam: <markdown-html content="**Demo Page**"></markdown-html>
-                var content = null;
-                if(attrs.content) content = attrs.content;
-
-                // build markdown editor template.
-                var newElement = $compile(
-                    '<div class="markdown-editor">'+
-                    '<div class="contianer-fluid col-xs4">'+
-                    '<div id="wmd-preview' + suffix + '" class="wmd-preview markdown-body" style="">'+
-                    '</div>' +
-                    '</div>'+
-                    '<div class="contianer-fluid col-xs4 block">' +
-                    '<div class="wmd-panel">' +
-                    '<div id="wmd-button-bar' + suffix + '"></div>' +
-                    '<textarea class="form-control" rows="'+rows+'" id="wmd-input' + suffix + '">'+content+'</textarea>' +
-                    '</div>' +
-                    '</div>'+
-                    '</div>')($scope);
-
-                // add markdown editor in to point called it. html() doesn't work
-                element.append(newElement);
 
                 // init markdown converter (Markdown.Converter.js)
                 var converter = new Markdown.Converter();
@@ -200,18 +196,46 @@ angular
                     strings: {quoteexample: "whatever you're quoting, put it right here"}
                 };
 
-                // init markdown editor
-                var editor = new Markdown.Editor(converter, suffix, options);
-                editor.hooks.chain("onPreviewRefresh", prettyPrint); // google code prettify to highlight code
-                editor.run();
+                // get content from attribute "content" and convert to html
+
+                var observer = function(content) {
+                    // build markdown editor template.
+                    var newElement = $compile(
+                        '<div class="markdown-editor">'+
+                        '<div class="contianer-fluid col-xs4">'+
+                        '<div id="wmd-preview' + suffix + '" class="wmd-preview markdown-body" style="">'+
+                        '</div>' +
+                        '</div>'+
+                        '<div class="contianer-fluid col-xs4 block">' +
+                        '<div class="wmd-panel">' +
+                        '<div id="wmd-button-bar' + suffix + '"></div>' +
+                        '<textarea class="form-control" rows="'+rows+'" id="wmd-input' + suffix + '">'+content+'</textarea>' +
+                        '</div>' +
+                        '</div>'+
+                        '</div>')(scope);
+
+                    // add markdown editor in to point called it. html() doesn't work
+                    element.html(newElement);
+
+                    // init markdown editor
+                    var editor = new Markdown.Editor(converter, suffix, options);
+                    editor.hooks.chain("onPreviewRefresh", prettyPrint); // google code prettify to highlight code
+                    editor.run();
+                };
+                attrs.$observe('content', observer);
+
+                // --------------------------------------------------
+
             }
         }
     })
     .directive('markdownSafe', function ($compile, $window) {
         return {
+            transclude: true,
+            replace: true,
             restrict: "E", // active this directive by input tag <markdown-safe></markdown-safe> into page
             scope: {},
-            link: function ($scope, element, attrs) {
+            link: function (scope, element, attrs) {
 
                 // "suffix" is parameter to identify  markdown editor.
                 // exam: <markdown-safe suffix="-second"></markdown-safe>
@@ -220,7 +244,7 @@ angular
                 // exam: "wmd-input-second" => suffix = "-second"
                 var suffix = '';
                 if(attrs.suffix) suffix = attrs.suffix;
-                
+
                 // Set height for editor using parmatter "rows" set as attribuite of element
                 // exam: <markdown-safe suffix="-second" rows="10"></markdown-safe>
                 // Default height of editor is 5 rows
@@ -229,26 +253,9 @@ angular
 
                 // System have input markdown content into editor by set "content" parameter
                 // exam: <markdown-safe content="**Demo Page**"></markdown-safe>
-                var content = '';
-                if(attrs.content) content = attrs.content;
+                //var content = '';
+                //if(attrs.content) content = attrs.content;
 
-                // build markdown editor template.
-                var newElement = $compile(
-                    '<div class="markdown-editor">'+
-                    '<div class="contianer-fluid col-xs4">'+
-                    '<div id="wmd-preview' + suffix + '" class="markdown-body wmd-preview">'+
-                    '</div>' +
-                    '</div>'+
-                    '<div class="contianer-fluid col-xs4 block">' +
-                    '<div class="wmd-panel">' +
-                    '<div id="wmd-button-bar' + suffix + '"></div>' +
-                    '<textarea class="form-control" rows="'+rows+'" id="wmd-input' + suffix + '">'+content.toString()+'</textarea>' +
-                    '</div>' +
-                    '</div>'+
-                    '</div>')($scope);
-
-                // add markdown editor in to point called it. html() doesn't work
-                element.append(newElement);
 
                 // init markdown converter (Markdown.Converter.js)
                 var converter = Markdown.getSanitizingConverter();
@@ -270,10 +277,35 @@ angular
                     strings: {quoteexample: "whatever you're quoting, put it right here"}
                 };
 
-                // init markdown editor
-                var editor = new Markdown.Editor(converter, suffix, options);
-                editor.hooks.chain("onPreviewRefresh", prettyPrint); // google code prettify to highlight code
-                editor.run();
+                // get content from attribute "content" and convert to html
+
+                var observer = function(content) {
+                    // build markdown editor template.
+                    var newElement = $compile(
+                        '<div class="markdown-editor">'+
+                        '<div class="contianer-fluid col-xs4">'+
+                        '<div id="wmd-preview' + suffix + '" class="markdown-body wmd-preview">'+
+                        '</div>' +
+                        '</div>'+
+                        '<div class="contianer-fluid col-xs4 block">' +
+                        '<div class="wmd-panel">' +
+                        '<div id="wmd-button-bar' + suffix + '"></div>' +
+                        '<textarea class="form-control" rows="'+rows+'" id="wmd-input' + suffix + '">'+content.toString()+'</textarea>' +
+                        '</div>' +
+                        '</div>'+
+                        '</div>')(scope);
+
+                    // add markdown editor in to point called it. html() doesn't work
+                    element.html(newElement);
+
+                    // init markdown editor
+                    var editor = new Markdown.Editor(converter, suffix, options);
+                    editor.hooks.chain("onPreviewRefresh", prettyPrint); // google code prettify to highlight code
+                    editor.run();
+                };
+                attrs.$observe('content', observer);
+
+                // --------------------------------------------------
             }
         }
     });
