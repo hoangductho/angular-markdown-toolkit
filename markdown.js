@@ -290,7 +290,7 @@ angular
                         '<div class="contianer-fluid col-xs4 block">' +
                         '<div class="wmd-panel">' +
                         '<div id="wmd-button-bar' + suffix + '"></div>' +
-                        '<textarea class="form-control" rows="'+rows+'" id="wmd-input' + suffix + '">'+content.toString()+'</textarea>' +
+                        '<textarea class="form-control" rows="'+rows+'" id="wmd-input' + suffix + '">'+content+'</textarea>' +
                         '</div>' +
                         '</div>'+
                         '</div>')(scope);
