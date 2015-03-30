@@ -143,7 +143,9 @@ angular
     .directive('markdownHtml', function ($compile, $window) {
         return {
             restrict: "E", // active this directive by input tag <markdown-html></markdown-html> into page
-            scope: {},
+            scope: {
+                content: '='
+            },
             link: function (scope, element, attrs) {
 
                 // "suffix" is parameter to identify  markdown editor.
@@ -209,7 +211,7 @@ angular
                         '<div class="contianer-fluid col-xs4 block">' +
                         '<div class="wmd-panel">' +
                         '<div id="wmd-button-bar' + suffix + '"></div>' +
-                        '<textarea class="form-control" rows="'+rows+'" id="wmd-input' + suffix + '">'+content+'</textarea>' +
+                        '<textarea class="form-control" rows="'+rows+'" id="wmd-input' + suffix + '" ng-model="content"></textarea>' +
                         '</div>' +
                         '</div>'+
                         '</div>')(scope);
@@ -234,8 +236,10 @@ angular
             transclude: true,
             replace: true,
             restrict: "E", // active this directive by input tag <markdown-safe></markdown-safe> into page
-            scope: {},
-            link: function (scope, element, attrs) {
+            scope: {
+                content: '='
+            },
+            link: function (scope, iElement, attrs) {
 
                 // "suffix" is parameter to identify  markdown editor.
                 // exam: <markdown-safe suffix="-second"></markdown-safe>
@@ -290,18 +294,19 @@ angular
                         '<div class="contianer-fluid col-xs4 block">' +
                         '<div class="wmd-panel">' +
                         '<div id="wmd-button-bar' + suffix + '"></div>' +
-                        '<textarea class="form-control" rows="'+rows+'" id="wmd-input' + suffix + '">'+content+'</textarea>' +
+                        '<textarea name="Content" class="form-control" rows="'+rows+'" id="wmd-input' + suffix + '" ng-model="content"></textarea>' +
                         '</div>' +
                         '</div>'+
                         '</div>')(scope);
 
                     // add markdown editor in to point called it. html() doesn't work
-                    element.html(newElement);
+                    iElement.html(newElement);
 
                     // init markdown editor
                     var editor = new Markdown.Editor(converter, suffix, options);
                     editor.hooks.chain("onPreviewRefresh", prettyPrint); // google code prettify to highlight code
                     editor.run();
+
                 };
                 attrs.$observe('content', observer);
 
