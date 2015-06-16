@@ -53,7 +53,6 @@ angular
                         return "<blockquote>" + rbg(inner) + "</blockquote>\n";
                     });
                 });
-                converter.hooks.chain("preBlockGamut", prettyPrint);
 
                 // using Markdown-extra to build markdown editor and markdown preview
                 Markdown.Extra.init(converter, {
@@ -71,79 +70,6 @@ angular
                         }
 
                         scope.sanitizedContent = $sce.trustAsHtml(converter.makeHtml(content));
-                    };
-
-                    unwatch = scope.$watch("content", run);
-
-                    run();
-                };
-                attrs.$observe('content', observer);
-
-                // --------------------------------------------------
-
-                var newElementHtml = '<div ng-bind-html="sanitizedContent" class="wmd-preview markdown-body"></div>';
-
-                var newElement = $compile(newElementHtml)(scope);
-
-                element.append(newElement);
-            }
-        }
-    })
-    .directive('markdownViewer', function($compile, $sce){
-        return {
-            transclude: true,
-            replace: true,
-            restrict: 'A',
-            scope: {},
-            link: function(scope, element, attrs) {
-
-                // System have input markdown content into editor by set "content" parameter
-                // exam: <markdown-safe content="**Demo Page**"></markdown-safe>
-
-                var unwatch;
-
-                // init markdown converter (Markdown.Converter.js)
-                var converter = new Markdown.Converter();
-
-                converter.hooks.chain("preConversion", function (text) {
-                    return text.replace(/\b(a\w*)/gi, "*$1*");
-                });
-                converter.hooks.chain("plainLinkText", function (url) {
-                    return "This is a link to " + url.replace(/^https?:\/\//, "");
-                });
-
-                /*converter.hooks.chain("preBlockGamut", function (text, rbg) {
-                 return text.replace(/^ {0,3}""" *\n((?:.*?\n)+?) {0,3}""" *$/gm, function (whole, inner) {
-                 return "<blockquote>" + rbg(inner) + "</blockquote>\n";
-                 });
-                 });*/
-                converter.hooks.chain("preBlockGamut", prettyPrint);
-
-                // using Markdown-extra to build markdown editor and markdown preview
-                Markdown.Extra.init(converter, {
-                    extensions: "all",
-                    highlighter: "prettify"
-                });
-
-                var safe = Markdown.getSanitizingConverter();
-
-                // using Markdown-extra to build markdown editor and markdown preview
-                Markdown.Extra.init(safe, {
-                    extensions: "all"
-                });
-
-                // get content from attribute "content" and convert to html
-                var observer = function(content) {
-                    var run = function run() {
-                        // stop continuing and watching if scope or the content is unreachable
-                        if (!scope || (content == undefined || content == null) && unwatch) {
-                            unwatch();
-                            return;
-                        }
-
-                        var santiz = safe.makeHtml(content);
-
-                        scope.sanitizedContent = $sce.trustAsHtml(converter.makeHtml(santiz));
                     };
 
                     unwatch = scope.$watch("content", run);
